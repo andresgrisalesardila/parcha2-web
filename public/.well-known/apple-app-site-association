@@ -1,0 +1,18 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": [
+          "9S954C8VB6.com.agrisales.desparcha2"
+        ],
+        "components": [
+          {
+            "/": "/parche/*",
+            "comment": "Abre invitaciones de Parcha2 dentro de la app."
+          }
+        ]
+      }
+    ]
+  }
+}
