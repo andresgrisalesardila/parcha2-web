@@ -1,11 +1,8 @@
-import InviteLanding from "./InviteLanding";
-
-export const metadata = {
-  title: "Invitación a un parche | Parcha2",
-  description: "Te invitaron a un parche en Parcha2.",
-};
+import InviteLandingClient from "./InviteLandingClient";
 
 export default async function ParcheInvitePage({ searchParams }) {
-  const query = await searchParams;
-  return <InviteLanding side={query?.side || ""} />;
+  const resolvedSearchParams = await searchParams;
+  const side = typeof resolvedSearchParams?.side === "string" ? resolvedSearchParams.side : "";
+
+  return <InviteLandingClient side={side} />;
 }

@@ -1,18 +1,11 @@
-import InviteLanding from "../InviteLanding";
-
-export const metadata = {
-  title: "Invitación a un parche | Parcha2",
-  description: "Te invitaron a un parche en Parcha2.",
-};
+import InviteLandingClient from "../InviteLandingClient";
 
 export default async function ParcheInviteByIdPage({ params, searchParams }) {
-  const routeParams = await params;
-  const query = await searchParams;
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
 
-  return (
-    <InviteLanding
-      parcheId={routeParams?.id || ""}
-      side={query?.side || ""}
-    />
-  );
+  const parcheId = typeof resolvedParams?.id === "string" ? resolvedParams.id : "";
+  const side = typeof resolvedSearchParams?.side === "string" ? resolvedSearchParams.side : "";
+
+  return <InviteLandingClient parcheId={parcheId} side={side} />;
 }
