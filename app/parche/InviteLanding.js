@@ -1,7 +1,17 @@
-"use client";
+const APP_NAME = "Parcha2";
 
-import { useMemo } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+function cleanText(value) {
+  if (typeof value !== "string") return "";
+  return value.trim();
+}
+
+function buildDeepLink(parcheId, side) {
+  const cleanId = cleanText(parcheId);
+  const cleanSide = cleanText(side);
+  const path = cleanId ? `parche/${encodeURIComponent(cleanId)}` : "";
+  const query = cleanSide ? `?side=${encodeURIComponent(cleanSide)}` : "";
+  return `parcha2://${path}${query}`;
+}
 
 const styles = {
   page: {
@@ -11,37 +21,53 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     padding: 24,
-    background: "radial-gradient(circle at 18% 18%, rgba(236,72,153,0.10), transparent 28%), radial-gradient(circle at 82% 82%, rgba(109,34,232,0.15), transparent 30%), linear-gradient(135deg, #fbf8ff 0%, #f4efff 100%)",
-    fontFamily: "Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    background:
+      "radial-gradient(circle at 16% 16%, rgba(236,72,153,0.10), transparent 28%), radial-gradient(circle at 84% 82%, rgba(109,34,232,0.15), transparent 31%), linear-gradient(135deg, #fbf8ff 0%, #f4efff 100%)",
+    fontFamily:
+      "Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     color: "#22143d",
+    overflow: "hidden",
   },
   bgTwoLeft: {
     position: "fixed",
-    left: "-70px",
-    top: "-80px",
-    fontSize: "440px",
+    left: "-90px",
+    top: "-95px",
+    fontSize: "430px",
     lineHeight: 1,
-    color: "rgba(109,34,232,0.05)",
-    fontWeight: 900,
+    color: "rgba(109,34,232,0.045)",
+    fontWeight: 950,
     pointerEvents: "none",
     transform: "rotate(-12deg)",
+    userSelect: "none",
   },
   bgTwoRight: {
     position: "fixed",
-    right: "-55px",
-    bottom: "-130px",
+    right: "-70px",
+    bottom: "-150px",
     fontSize: "390px",
     lineHeight: 1,
     color: "rgba(236,72,153,0.06)",
-    fontWeight: 900,
+    fontWeight: 950,
     pointerEvents: "none",
     transform: "rotate(14deg)",
+    userSelect: "none",
+  },
+  glow: {
+    position: "fixed",
+    width: 300,
+    height: 300,
+    borderRadius: 999,
+    background: "rgba(109,34,232,0.10)",
+    filter: "blur(70px)",
+    right: "18%",
+    top: "18%",
+    pointerEvents: "none",
   },
   card: {
-    width: "min(100%, 520px)",
+    width: "min(100%, 540px)",
     position: "relative",
     zIndex: 1,
-    background: "rgba(255,255,255,0.90)",
+    background: "rgba(255,255,255,0.92)",
     border: "1px solid rgba(109,34,232,0.12)",
     borderRadius: 34,
     boxShadow: "0 28px 90px rgba(76,29,149,0.16)",
@@ -50,12 +76,12 @@ const styles = {
     overflow: "hidden",
   },
   logo: {
-    width: 122,
-    height: 122,
+    width: 132,
+    height: 132,
     objectFit: "contain",
     margin: "0 auto 14px",
     display: "block",
-    filter: "drop-shadow(0 16px 28px rgba(236,72,153,0.20))",
+    filter: "drop-shadow(0 16px 28px rgba(236,72,153,0.22))",
   },
   eyebrow: {
     display: "inline-flex",
@@ -71,7 +97,7 @@ const styles = {
   },
   title: {
     fontSize: "clamp(30px, 5vw, 42px)",
-    lineHeight: 1.03,
+    lineHeight: 1.04,
     letterSpacing: "-0.045em",
     margin: "0 0 14px",
     color: "#21123c",
@@ -86,7 +112,7 @@ const styles = {
     fontSize: 16,
     fontWeight: 650,
     lineHeight: 1.5,
-    maxWidth: 390,
+    maxWidth: 400,
   },
   actions: {
     display: "grid",
@@ -97,7 +123,8 @@ const styles = {
     border: 0,
     borderRadius: 19,
     padding: "18px 22px",
-    background: "linear-gradient(135deg, #4c1d95 0%, #6d22e8 54%, #8b2cf6 100%)",
+    background:
+      "linear-gradient(135deg, #4c1d95 0%, #6d22e8 54%, #8b2cf6 100%)",
     color: "#fff",
     fontSize: 17,
     fontWeight: 950,
@@ -106,6 +133,7 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
     boxShadow: "0 15px 34px rgba(109,34,232,0.32)",
+    boxSizing: "border-box",
   },
   secondary: {
     width: "100%",
@@ -132,40 +160,36 @@ const styles = {
   },
 };
 
-export default function InviteLandingClient() {
-  const params = useParams();
-  const searchParams = useSearchParams();
-  const parcheId = typeof params?.id === "string" ? params.id : "";
-  const side = searchParams?.get("side") || "";
-
-  const deepLink = useMemo(() => {
-    const path = parcheId ? `parche/${encodeURIComponent(parcheId)}` : "";
-    const query = side ? `?side=${encodeURIComponent(side)}` : "";
-    return `parcha2://${path}${query}`;
-  }, [parcheId, side]);
+export default function InviteLanding({ parcheId = "", side = "" }) {
+  const deepLink = buildDeepLink(parcheId, side);
 
   return (
     <main style={styles.page}>
       <div style={styles.bgTwoLeft}>2</div>
       <div style={styles.bgTwoRight}>2</div>
+      <div style={styles.glow} />
       <section style={styles.card}>
         <img src="/logo-2.png" alt="Parcha2" style={styles.logo} />
         <div style={styles.eyebrow}>✨ Invitación externa</div>
         <h1 style={styles.title}>
-          Te invitaron a un parche en <span style={styles.brand}>Parcha2</span>
+          Te invitaron a un parche en <span style={styles.brand}>{APP_NAME}</span>
         </h1>
-        <p style={styles.subtitle}>Abre la app para ver el plan, conocer los detalles y aceptar la invitación.</p>
+        <p style={styles.subtitle}>
+          Abre la app para ver el plan, conocer los detalles y aceptar la invitación.
+        </p>
         <div style={styles.actions}>
           <a href={deepLink} style={styles.primary}>
-            <span>Abrir en Parcha2</span>
+            <span>Abrir en {APP_NAME}</span>
             <span>›</span>
           </a>
           <a href="/" style={styles.secondary}>
-            <span>Conocer Parcha2</span>
+            <span>Conocer {APP_NAME}</span>
             <span>›</span>
           </a>
         </div>
-        <p style={styles.note}>Si la app no abre, instala Parcha2 y vuelve a tocar el link de invitación.</p>
+        <p style={styles.note}>
+          Si la app no abre, instala {APP_NAME} y vuelve a tocar el link de invitación.
+        </p>
       </section>
     </main>
   );
